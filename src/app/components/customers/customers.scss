@@ -1,0 +1,209 @@
+.customers-container {
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+  color: var(--primary);
+  font-size: 1.8rem;
+}
+
+/* ========== ADD FORM ========== */
+.add-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-form h2 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* ========== SEARCH ========== */
+.search-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* ========== CONTENT LAYOUT ========== */
+.content-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+}
+
+/* ========== CUSTOMER LIST ========== */
+.customer-list {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.customer-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.customer-item:hover {
+  background-color: #f5f7fa;
+}
+
+.customer-item.selected {
+  background-color: var(--primary);
+  color: white;
+}
+
+.customer-item.selected .customer-email {
+  color: #ccc;
+}
+
+.customer-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.customer-email {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* ========== CUSTOMER DETAIL ========== */
+.customer-detail {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.customer-detail h2 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.customer-detail p {
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.detail-actions {
+  margin-top: 1.5rem;
+}
+
+/* ========== NO SELECTION ========== */
+.no-selection {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+/* ========== BUTTONS ========== */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.btn-secondary:hover {
+  background-color: #f5f7fa;
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* ========== ERROR / LOADING ========== */
+.error {
+  color: var(--danger);
+  margin-bottom: 1rem;
+}
+
+.loading {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}

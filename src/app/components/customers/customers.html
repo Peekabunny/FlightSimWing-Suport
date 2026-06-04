@@ -1,1 +1,84 @@
-<p>customers works!</p>
+<div class="customers-container">
+
+  <!-- ========== HEADER ========== -->
+  <div class="page-header">
+    <h1>Customers</h1>
+    <button class="btn-primary" (click)="showAddForm = !showAddForm">
+      + Add Customer
+    </button>
+  </div>
+
+  <!-- ========== ADD CUSTOMER FORM ========== -->
+  <div class="add-form" *ngIf="showAddForm">
+    <h2>New Customer</h2>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" name="name" [(ngModel)]="newCustomer.name" placeholder="Full name" />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" [(ngModel)]="newCustomer.email" placeholder="Email address" />
+    </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input type="text" name="phone" [(ngModel)]="newCustomer.phone" placeholder="Phone number" />
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" (click)="addCustomer()">Save</button>
+      <button class="btn-secondary" (click)="showAddForm = false">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ========== SEARCH ========== -->
+  <div class="search-bar">
+    <input
+      type="text"
+      name="filterQuery"
+      [(ngModel)]="filterQuery"
+      placeholder="Search customers..."
+      (keyup.enter)="search()" />
+    <button class="btn-primary" (click)="search()">Search</button>
+  </div>
+
+  <!-- ========== ERROR MESSAGE ========== -->
+  <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <!-- ========== LOADING ========== -->
+  <div class="loading" *ngIf="isLoading">Loading...</div>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div class="content-layout">
+
+    <!-- LEFT: CUSTOMER LIST -->
+    <div class="customer-list">
+      <div
+        class="customer-item"
+        *ngFor="let customer of customers"
+        [class.selected]="selectedCustomer?.id === customer.id"
+        (click)="selectCustomer(customer)">
+        <div class="customer-name">{{ customer.name }}</div>
+        <div class="customer-email">{{ customer.email }}</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: CUSTOMER DETAIL -->
+    <div class="customer-detail" *ngIf="selectedCustomer">
+      <h2>{{ selectedCustomer.name }}</h2>
+      <p><strong>Email:</strong> {{ selectedCustomer.email }}</p>
+      <p><strong>Phone:</strong> {{ selectedCustomer.phone }}</p>
+      <p><strong>Last Contact:</strong> {{ selectedCustomer.lastContact }}</p>
+
+      <div class="detail-actions">
+        <button class="btn-danger" (click)="deleteCustomer(selectedCustomer.id)">
+          Delete Customer
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: NO SELECTION -->
+    <div class="no-selection" *ngIf="!selectedCustomer">
+      <p>Select a customer to view details</p>
+    </div>
+
+  </div>
+</div>
