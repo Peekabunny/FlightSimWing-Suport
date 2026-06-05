@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -11,29 +11,37 @@ import { AuthService } from '../../services/auth';
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class Login {
+export class Login implements OnInit {
   username = '';
   password = '';
   errorMessage = '';
-  isLoading = false;  // shows loading state while waiting for API
+  isLoading = false;
 
-  // inject AuthService and Router
   constructor(
     private authService: AuthService,
     private router: Router) {}
 
+  // ========== ON INIT ==========
+  // if already logged in skip login page
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/customers']);
+    }
+  }
+
+  // ========== LOGIN ==========
   onLogin() {
-    this.isLoading = true;      // start loading
-    this.errorMessage = '';     // clear previous errors
+    this.isLoading = true;
+    this.errorMessage = '';
 
     this.authService.login(this.username, this.password).subscribe({
       next: (token) => {
-        this.authService.saveToken(token);  // save JWT to localStorage
-        this.router.navigate(['/customers']); // redirect to customers page
+        this.authService.saveToken(token);
+        this.router.navigate(['/customers']);
         this.isLoading = false;
       },
       error: (err) => {
-        this.errorMessage = 'Invalid username or password'; // show error
+        this.errorMessage = 'Invalid username or password';
         this.isLoading = false;
       }
     });

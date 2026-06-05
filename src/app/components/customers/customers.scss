@@ -1,5 +1,7 @@
 .customers-container {
-  padding: 2rem;
+  padding: 2rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .page-header {
@@ -141,6 +143,8 @@
 }
 
 .detail-actions {
+    display: flex;
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
@@ -206,4 +210,10 @@
 .loading {
   color: var(--primary);
   margin-bottom: 1rem;
+}
+
+.success {
+  color: var(--success);
+  margin-bottom: 1rem;
+  font-weight: 500;
 }

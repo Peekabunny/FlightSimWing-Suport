@@ -21,8 +21,8 @@ const authGuard = () => {
 };
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: Login },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, // default route
+  { path: 'login', component: Login }, // login page does not require auth guard
   { path: 'customers', component: Customers, canActivate: [authGuard] },
   { path: 'support-issues', component: SupportIssues, canActivate: [authGuard] },
   { path: 'instructions', component: Instructions, canActivate: [authGuard] },
