@@ -1,1 +1,113 @@
-<p>instructions works!</p>
+<div class="instructions-container">
+
+  <!-- ========== HEADER ========== -->
+  <div class="page-header">
+    <h1>Troubleshooting Instructions</h1>
+    <button class="btn-primary" (click)="showAddForm = !showAddForm">
+      + Add Instruction
+    </button>
+  </div>
+
+  <!-- ========== ADD INSTRUCTION FORM ========== -->
+  <div class="add-form" *ngIf="showAddForm">
+    <h2>New Instruction</h2>
+    <div class="form-group">
+      <label>Product</label>
+      <select name="productId" [(ngModel)]="newInstruction.productId">
+        <option value="0">-- Select a product --</option>
+        <option *ngFor="let item of catalog" [value]="item.id">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Issue Type</label>
+      <input type="text" name="issueType" [(ngModel)]="newInstruction.issueType" placeholder="e.g. Connection Issue, Software Crash" />
+    </div>
+    <div class="form-group">
+      <label>Steps</label>
+      <textarea name="steps" [(ngModel)]="newInstruction.steps" placeholder="Step by step instructions..." rows="5"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea name="notes" [(ngModel)]="newInstruction.notes" placeholder="Additional notes..." rows="3"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" (click)="createInstruction()">Save</button>
+      <button class="btn-secondary" (click)="showAddForm = false">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ========== SEARCH BAR ========== -->
+  <div class="search-bar">
+    <input
+      type="text"
+      name="searchQuery"
+      [(ngModel)]="searchQuery"
+      placeholder="Search by issue type or keywords..."
+      (input)="search()" />
+  </div>
+
+  <!-- ========== FILTER BY PRODUCT ========== -->
+  <div class="filter-bar">
+    <label>Filter by Product:</label>
+    <select name="selectedProductId" [(ngModel)]="selectedProductId" (ngModelChange)="filterByProduct()">
+      <option value="0">All Products</option>
+      <option *ngFor="let item of catalog" [value]="item.id">
+        {{ item.name }}
+      </option>
+    </select>
+  </div>
+
+  <!-- ========== MESSAGES ========== -->
+  <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="loading" *ngIf="isLoading">Loading...</div>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div class="content-layout">
+
+    <!-- LEFT: INSTRUCTIONS LIST -->
+    <div class="instructions-list">
+      <div
+        class="instruction-item"
+        *ngFor="let instruction of filteredInstructions"
+        [class.selected]="selectedInstruction?.id === instruction.id"
+        (click)="selectInstruction(instruction)">
+        <div class="instruction-type">{{ instruction.issueType }}</div>
+        <div class="instruction-product">Product ID: {{ instruction.productId }}</div>
+      </div>
+
+      <div class="no-instructions" *ngIf="filteredInstructions.length === 0 && !isLoading">
+        <p>No instructions found</p>
+      </div>
+    </div>
+
+    <!-- RIGHT: INSTRUCTION DETAIL -->
+    <div class="instruction-detail" *ngIf="selectedInstruction">
+      <h2>{{ selectedInstruction.issueType }}</h2>
+
+      <div class="steps-section">
+        <h3>Steps</h3>
+        <p>{{ selectedInstruction.steps }}</p>
+      </div>
+
+      <div class="notes-section" *ngIf="selectedInstruction.notes">
+        <h3>Notes</h3>
+        <p>{{ selectedInstruction.notes }}</p>
+      </div>
+
+      <div class="detail-actions">
+        <button class="btn-danger" (click)="deleteInstruction(selectedInstruction.id)">
+          Delete Instruction
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: NO SELECTION -->
+    <div class="no-selection" *ngIf="!selectedInstruction">
+      <p>Select an instruction to view details</p>
+    </div>
+
+  </div>
+</div>

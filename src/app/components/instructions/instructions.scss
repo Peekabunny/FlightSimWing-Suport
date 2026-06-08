@@ -1,0 +1,278 @@
+.instructions-container {
+  padding: 2rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+  color: var(--primary);
+  font-size: 1.8rem;
+}
+
+/* ========== ADD FORM ========== */
+.add-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-form h2 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: white;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* ========== FILTER BAR ========== */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-bar label {
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.filter-bar select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: white;
+  min-width: 200px;
+}
+
+/* ========== CONTENT LAYOUT ========== */
+.content-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+}
+
+/* ========== INSTRUCTIONS LIST ========== */
+.instructions-list {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.instruction-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.instruction-item:hover {
+  background-color: #f5f7fa;
+}
+
+.instruction-item.selected {
+  background-color: var(--primary);
+  color: white;
+}
+
+.instruction-type {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.instruction-product {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.instruction-item.selected .instruction-product {
+  color: #ccc;
+}
+
+/* ========== INSTRUCTION DETAIL ========== */
+.instruction-detail {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.instruction-detail h2 {
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.steps-section {
+  margin-bottom: 1.5rem;
+}
+
+.steps-section h3 {
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.steps-section p {
+  white-space: pre-line;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.notes-section {
+  background: #f5f7fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.notes-section h3 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.notes-section p {
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ========== NO SELECTION ========== */
+.no-selection {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.no-instructions {
+  padding: 2rem;
+  text-align: center;
+  color: #999;
+}
+
+/* ========== BUTTONS ========== */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.btn-secondary:hover {
+  background-color: #f5f7fa;
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.detail-actions {
+  margin-top: 1.5rem;
+}
+
+/* ========== ERROR / LOADING ========== */
+.error {
+  color: var(--danger);
+  margin-bottom: 1rem;
+}
+
+.success {
+  color: var(--success);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.loading {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.search-bar {
+  margin-bottom: 1rem;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
