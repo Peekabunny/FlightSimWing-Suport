@@ -1,1 +1,127 @@
-<p>support-issues works!</p>
+<div class="issues-container">
+
+  <!-- ========== HEADER ========== -->
+  <div class="page-header">
+    <h1>Support Issues</h1>
+    <button class="btn-primary" (click)="showAddForm = !showAddForm">
+      + New Issue
+    </button>
+  </div>
+
+  <!-- ========== ADD ISSUE FORM ========== -->
+  <div class="add-form" *ngIf="showAddForm">
+    <h2>New Support Issue</h2>
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" name="title" [(ngModel)]="newIssue.title" placeholder="Issue title" />
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="description" [(ngModel)]="newIssue.description" placeholder="Describe the issue" rows="3"></textarea>
+    </div>
+
+    <!-- customer search -->
+    <div class="form-group">
+      <label>Customer</label>
+      <input
+        type="text"
+        name="customerSearch"
+        [formControl]="customerControl"
+        placeholder="Search customer..."
+        (focus)="showCustomerList = true"
+        (blur)="hideCustomerList()" />
+
+      <!-- dropdown list -->
+      <div class="autocomplete-list" *ngIf="showCustomerList && (filteredCustomers | async)?.length">
+        <div
+          class="autocomplete-item"
+          *ngFor="let customer of filteredCustomers | async"
+          (mousedown)="onCustomerSelected(customer)">
+          <span class="autocomplete-name">{{ customer.name }}</span>
+          <span class="autocomplete-email">{{ customer.email }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Product</label>
+      <select name="productId" [(ngModel)]="newIssue.productId">
+        <option value="0">-- Select a product --</option>
+        <option *ngFor="let product of products" [value]="product.id">
+          {{ product.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-primary" (click)="createIssue()">Save</button>
+      <button class="btn-secondary" (click)="showAddForm = false">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ========== FILTER BY STATUS ========== -->
+  <div class="filter-bar">
+    <button class="filter-btn" [class.active]="filterStatus === ''" (click)="filterByStatus('')">All</button>
+    <button class="filter-btn status-open" [class.active]="filterStatus === '0'" (click)="filterByStatus('0')">Open</button>
+    <button class="filter-btn status-inprogress" [class.active]="filterStatus === '1'" (click)="filterByStatus('1')">In Progress</button>
+    <button class="filter-btn status-resolved" [class.active]="filterStatus === '2'" (click)="filterByStatus('2')">Resolved</button>
+  </div>
+
+  <!-- ========== MESSAGES ========== -->
+  <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="loading" *ngIf="isLoading">Loading...</div>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div class="content-layout">
+
+    <!-- LEFT: ISSUES LIST -->
+    <div class="issues-list">
+      <div
+        class="issue-item"
+        *ngFor="let issue of issues"
+        [class.selected]="selectedIssue?.id === issue.id"
+        (click)="selectIssue(issue)">
+        <div class="issue-title">{{ issue.title }}</div>
+        <span class="status-badge" [class]="getStatusClass(issue.status)">
+          {{ getStatusLabel(issue.status) }}
+        </span>
+      </div>
+
+      <div class="no-issues" *ngIf="issues.length === 0 && !isLoading">
+        <p>No issues found</p>
+      </div>
+    </div>
+
+    <!-- RIGHT: ISSUE DETAIL -->
+    <div class="issue-detail" *ngIf="selectedIssue">
+      <h2>{{ selectedIssue.title }}</h2>
+      <p><strong>Description:</strong> {{ selectedIssue.description }}</p>
+      <p><strong>Status:</strong>
+        <span class="status-badge" [class]="getStatusClass(selectedIssue.status)">
+          {{ getStatusLabel(selectedIssue.status) }}
+        </span>
+      </p>
+      <p><strong>Created:</strong> {{ selectedIssue.createdDate | date:'MMM d, yyyy' }}</p>
+
+      <div class="status-actions">
+        <h3>Update Status</h3>
+        <div class="status-buttons">
+          <button class="btn-status open" (click)="updateStatus(selectedIssue, 0)">Open</button>
+          <button class="btn-status inprogress" (click)="updateStatus(selectedIssue, 1)">In Progress</button>
+          <button class="btn-status resolved" (click)="updateStatus(selectedIssue, 2)">Resolved</button>
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <button class="btn-danger" (click)="deleteIssue(selectedIssue.id)">Delete Issue</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: NO SELECTION -->
+    <div class="no-selection" *ngIf="!selectedIssue">
+      <p>Select an issue to view details</p>
+    </div>
+
+  </div>
+</div>

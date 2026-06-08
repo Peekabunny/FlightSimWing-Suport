@@ -26,7 +26,7 @@ export class Customers implements OnInit {
 
   // ========== PRODUCT PROPERTIES ==========
   products: any[] = [];
-  catalog: any[] = [];          // product catalog for dropdown
+  catalog: any[] = [];
   showAddProductForm = false;
   newProduct = {
     name: '',
@@ -40,8 +40,8 @@ export class Customers implements OnInit {
     name: '',
     email: '',
     phone: '',
-    productCatalogId: 0,        // selected product from dropdown
-    purchaseDate: ''            // purchase date
+    productCatalogId: 0,
+    purchaseDate: ''
   };
 
   // ========== EDIT CUSTOMER FORM ==========
@@ -60,7 +60,7 @@ export class Customers implements OnInit {
   // ========== ON INIT ==========
   ngOnInit() {
     this.loadCustomers();
-    this.loadCatalog();   // load product catalog for dropdown
+    this.loadCatalog();
   }
 
   // ========== LOAD CATALOG ==========
@@ -122,7 +122,6 @@ export class Customers implements OnInit {
         const selectedProduct = this.catalog.find(
           p => p.id == this.newCustomer.productCatalogId);
 
-        // create product linked to new customer
         if (selectedProduct) {
           this.productService.createProduct({
             name: selectedProduct.name,
@@ -165,7 +164,7 @@ export class Customers implements OnInit {
     }).subscribe({
       next: () => {
         this.loadProducts(this.selectedCustomer.id);
-        this.newProduct = { name: '', purchaseDate: '', customerId: 0 };
+        this.newProduct = { name: '', description: '', purchaseDate: '', customerId: 0 };
         this.showAddProductForm = false;
         this.successMessage = 'Product added successfully!';
         setTimeout(() => this.successMessage = '', 3000);
@@ -218,7 +217,7 @@ export class Customers implements OnInit {
     if (confirm('Are you sure you want to delete this customer?')) {
       this.customerService.deleteCustomer(id).subscribe({
         next: () => {
-          this.loadCustomers();
+          this.customers = this.customers.filter(c => c.id !== id);
           this.selectedCustomer = null;
           this.products = [];
         },
@@ -234,7 +233,7 @@ export class Customers implements OnInit {
     if (confirm('Are you sure you want to delete this product?')) {
       this.productService.deleteProduct(id).subscribe({
         next: () => {
-          this.loadProducts(this.selectedCustomer.id);
+          this.products = this.products.filter(p => p.id !== id);
           this.successMessage = 'Product deleted successfully!';
           setTimeout(() => this.successMessage = '', 3000);
         },
