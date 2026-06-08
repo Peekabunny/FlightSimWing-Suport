@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CustomerService } from '../../services/customer';
 import { ProductService } from '../../services/product';
+import { ProductCatalogService } from '../../services/product-catalog';
 
 @Component({
   selector: 'app-customers',
@@ -25,6 +26,7 @@ export class Customers implements OnInit {
 
   // ========== PRODUCT PROPERTIES ==========
   products: any[] = [];
+  catalog: any[] = [];          // product catalog for dropdown
   showAddProductForm = false;
   newProduct = {
     name: '',
@@ -38,6 +40,8 @@ export class Customers implements OnInit {
     name: '',
     email: '',
     phone: '',
+    productCatalogId: 0,        // selected product from dropdown
+    purchaseDate: ''            // purchase date
   };
 
   // ========== EDIT CUSTOMER FORM ==========
@@ -50,11 +54,25 @@ export class Customers implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private productService: ProductService) {}
+    private productService: ProductService,
+    private productCatalogService: ProductCatalogService) {}
 
   // ========== ON INIT ==========
   ngOnInit() {
     this.loadCustomers();
+    this.loadCatalog();   // load product catalog for dropdown
+  }
+
+  // ========== LOAD CATALOG ==========
+  loadCatalog() {
+    this.productCatalogService.getCatalog().subscribe({
+      next: (response) => {
+        this.catalog = response.data;
+      },
+      error: (err) => {
+        console.log('Failed to load catalog', err);
+      }
+    });
   }
 
   // ========== LOAD CUSTOMERS ==========
@@ -77,7 +95,7 @@ export class Customers implements OnInit {
     this.selectedCustomer = customer;
     this.isEditing = false;
     this.showAddProductForm = false;
-    this.loadProducts(customer.id);  // load products for this customer
+    this.loadProducts(customer.id);
   }
 
   // ========== LOAD PRODUCTS ==========
@@ -92,13 +110,62 @@ export class Customers implements OnInit {
     });
   }
 
+  // ========== ADD CUSTOMER WITH PRODUCT ==========
+  addCustomer() {
+    this.customerService.createCustomer({
+      name: this.newCustomer.name,
+      email: this.newCustomer.email,
+      phone: this.newCustomer.phone
+    }).subscribe({
+      next: (response) => {
+        const newCustomerId = response.data.id;
+        const selectedProduct = this.catalog.find(
+          p => p.id == this.newCustomer.productCatalogId);
+
+        // create product linked to new customer
+        if (selectedProduct) {
+          this.productService.createProduct({
+            name: selectedProduct.name,
+            description: selectedProduct.description,
+            purchaseDate: this.newCustomer.purchaseDate,
+            customerId: newCustomerId
+          }).subscribe({
+            next: () => {
+              this.loadCustomers();
+              this.newCustomer = { name: '', email: '', phone: '', productCatalogId: 0, purchaseDate: '' };
+              this.showAddForm = false;
+              this.successMessage = 'Customer and product added successfully!';
+              setTimeout(() => this.successMessage = '', 3000);
+            },
+            error: (err) => {
+              this.errorMessage = 'Customer created but failed to add product';
+            }
+          });
+        } else {
+          this.loadCustomers();
+          this.showAddForm = false;
+        }
+      },
+      error: (err) => {
+        this.errorMessage = 'Failed to create customer';
+      },
+    });
+  }
+
   // ========== ADD PRODUCT ==========
   addProduct() {
-    this.newProduct.customerId = this.selectedCustomer.id;
-    this.productService.createProduct(this.newProduct).subscribe({
+    const selectedProduct = this.catalog.find(
+      p => p.id == this.newProduct.name);
+
+    this.productService.createProduct({
+      name: selectedProduct ? selectedProduct.name : this.newProduct.name,
+      description: selectedProduct ? selectedProduct.description : '',
+      purchaseDate: this.newProduct.purchaseDate,
+      customerId: this.selectedCustomer.id
+    }).subscribe({
       next: () => {
         this.loadProducts(this.selectedCustomer.id);
-        this.newProduct = { name: '', description: '', purchaseDate: '', customerId: 0 };
+        this.newProduct = { name: '', purchaseDate: '', customerId: 0 };
         this.showAddProductForm = false;
         this.successMessage = 'Product added successfully!';
         setTimeout(() => this.successMessage = '', 3000);
@@ -106,36 +173,6 @@ export class Customers implements OnInit {
       error: (err) => {
         this.errorMessage = 'Failed to add product';
       }
-    });
-  }
-
-  // ========== DELETE PRODUCT ==========
-  deleteProduct(id: number) {
-    if (confirm('Are you sure you want to delete this product?')) {
-      this.productService.deleteProduct(id).subscribe({
-        next: () => {
-          this.loadProducts(this.selectedCustomer.id);
-          this.successMessage = 'Product deleted successfully!';
-          setTimeout(() => this.successMessage = '', 3000);
-        },
-        error: (err) => {
-          this.errorMessage = 'Failed to delete product';
-        }
-      });
-    }
-  }
-
-  // ========== ADD CUSTOMER ==========
-  addCustomer() {
-    this.customerService.createCustomer(this.newCustomer).subscribe({
-      next: () => {
-        this.loadCustomers();
-        this.newCustomer = { name: '', email: '', phone: '' };
-        this.showAddForm = false;
-      },
-      error: (err) => {
-        this.errorMessage = 'Failed to create customer';
-      },
     });
   }
 
@@ -188,6 +225,22 @@ export class Customers implements OnInit {
         error: (err) => {
           this.errorMessage = 'Failed to delete customer';
         },
+      });
+    }
+  }
+
+  // ========== DELETE PRODUCT ==========
+  deleteProduct(id: number) {
+    if (confirm('Are you sure you want to delete this product?')) {
+      this.productService.deleteProduct(id).subscribe({
+        next: () => {
+          this.loadProducts(this.selectedCustomer.id);
+          this.successMessage = 'Product deleted successfully!';
+          setTimeout(() => this.successMessage = '', 3000);
+        },
+        error: (err) => {
+          this.errorMessage = 'Failed to delete product';
+        }
       });
     }
   }

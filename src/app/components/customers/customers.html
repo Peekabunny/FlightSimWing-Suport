@@ -11,6 +11,8 @@
   <!-- ========== ADD CUSTOMER FORM ========== -->
   <div class="add-form" *ngIf="showAddForm">
     <h2>New Customer</h2>
+
+    <!-- customer info -->
     <div class="form-group">
       <label>Name</label>
       <input type="text" name="newName" [(ngModel)]="newCustomer.name" placeholder="Full name" />
@@ -23,6 +25,23 @@
       <label>Phone</label>
       <input type="text" name="newPhone" [(ngModel)]="newCustomer.phone" placeholder="Phone number" />
     </div>
+
+    <!-- product info -->
+    <div class="form-divider">Product</div>
+    <div class="form-group">
+      <label>Product</label>
+      <select name="productCatalogId" [(ngModel)]="newCustomer.productCatalogId">
+        <option value="0">-- Select a product --</option>
+        <option *ngFor="let item of catalog" [value]="item.id">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Purchase Date</label>
+      <input type="date" name="newPurchaseDate" [(ngModel)]="newCustomer.purchaseDate" />
+    </div>
+
     <div class="form-actions">
       <button class="btn-primary" (click)="addCustomer()">Save</button>
       <button class="btn-secondary" (click)="showAddForm = false">Cancel</button>
@@ -88,12 +107,8 @@
       <div class="detail-header">
         <h2>{{ selectedCustomer.name }}</h2>
         <div class="detail-actions">
-          <button class="btn-primary" (click)="startEdit(selectedCustomer)">
-            Edit
-          </button>
-          <button class="btn-danger" (click)="deleteCustomer(selectedCustomer.id)">
-            Delete
-          </button>
+          <button class="btn-primary" (click)="startEdit(selectedCustomer)">Edit</button>
+          <button class="btn-danger" (click)="deleteCustomer(selectedCustomer.id)">Delete</button>
         </div>
       </div>
 
@@ -113,16 +128,17 @@
         <!-- add product form -->
         <div class="add-product-form" *ngIf="showAddProductForm">
           <div class="form-group">
-            <label>Product Name</label>
-            <input type="text" name="productName" [(ngModel)]="newProduct.name" placeholder="Product name" />
-          </div>
-          <div class="form-group">
-            <label>Description</label>
-            <input type="text" name="productDescription" [(ngModel)]="newProduct.description" placeholder="Description" />
+            <label>Product</label>
+            <select name="productName" [(ngModel)]="newProduct.name">
+              <option value="">-- Select a product --</option>
+              <option *ngFor="let item of catalog" [value]="item.id">
+                {{ item.name }}
+              </option>
+            </select>
           </div>
           <div class="form-group">
             <label>Purchase Date</label>
-            <input type="date" name="purchaseDate" [(ngModel)]="newProduct.purchaseDate" />
+            <input type="date" name="productPurchaseDate" [(ngModel)]="newProduct.purchaseDate" />
           </div>
           <div class="form-actions">
             <button class="btn-primary" (click)="addProduct()">Save</button>
@@ -134,7 +150,6 @@
         <div class="product-item" *ngFor="let product of products">
           <div class="product-info">
             <div class="product-name">{{ product.name }}</div>
-            <div class="product-description">{{ product.description }}</div>
             <div class="product-date">Purchased: {{ product.purchaseDate | date:'MMM d, yyyy' }}</div>
           </div>
           <button class="btn-danger btn-sm" (click)="deleteProduct(product.id)">Delete</button>
