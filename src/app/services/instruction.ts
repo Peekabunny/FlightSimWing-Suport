@@ -8,7 +8,7 @@ import { AuthService } from './auth';
 })
 export class InstructionService {
 
-  private apiUrl = 'https://localhost:7227';
+private apiUrl = 'https://fsw-support-api-eybrdfemfvdqfnek.westus3-01.azurewebsites.net';
 
   constructor(
     private http: HttpClient,
