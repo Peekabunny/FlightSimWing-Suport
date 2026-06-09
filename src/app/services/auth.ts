@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   
   // base URL of your .NET API
-  private apiUrl = 'https://localhost:7227';
+ private apiUrl = 'https://fsw-support-api-eybrdfemfvdqfnek.westus3-01.azurewebsites.net';
 
   // HttpClient is injected to make HTTP requests to the API
   constructor(private http: HttpClient) {}
