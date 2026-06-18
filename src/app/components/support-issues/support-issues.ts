@@ -25,6 +25,7 @@ export class SupportIssues implements OnInit {
   showCustomerList = false;
 
   // ========== PROPERTIES ==========
+  allIssues: any[] = [];
   issues: any[] = [];
   customers: any[] = [];
   filteredCustomers: Observable<any[]> = new Observable<any[]>();
@@ -62,22 +63,20 @@ export class SupportIssues implements OnInit {
   }
 
   // ========== LOAD ISSUES ==========
-  loadIssues() {
-    this.isLoading = true;
-    this.supportIssueService.getIssues(
-      undefined,
-      this.filterStatus || undefined
-    ).subscribe({
-      next: (response) => {
-        this.issues = response.data;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.errorMessage = 'Failed to load issues';
-        this.isLoading = false;
-      }
-    });
-  }
+ loadIssues() {
+  this.isLoading = true;
+  this.supportIssueService.getIssues().subscribe({
+    next: (response) => {
+      this.allIssues = response.data;  
+      this.issues = response.data;     
+      this.isLoading = false;
+    },
+    error: (err) => {
+      this.errorMessage = 'Failed to load issues';
+      this.isLoading = false;
+    }
+  });
+}
 
   // ========== LOAD CUSTOMERS ==========
   loadCustomers() {
@@ -155,9 +154,21 @@ updateStatus(issue: any, status: number) {
     status: status
   }).subscribe({
     next: () => {
-      // update locally instead of reloading
+      // update in allIssues
+      const issueInAll = this.allIssues.find(i => i.id === issue.id);
+      if (issueInAll) issueInAll.status = status;
+
+      // update in filtered list
       issue.status = status;
       this.selectedIssue.status = status;
+
+      // re-apply current filter
+      if (this.filterStatus !== '') {
+        this.issues = this.allIssues.filter(
+          i => i.status === parseInt(this.filterStatus));
+        this.selectedIssue = null;
+      }
+
       this.successMessage = 'Status updated successfully!';
       setTimeout(() => this.successMessage = '', 3000);
     },
@@ -206,8 +217,14 @@ deleteIssue(id: number) {
   }
 
   // ========== FILTER BY STATUS ==========
-  filterByStatus(status: string) {
-    this.filterStatus = status;
-    this.loadIssues();
+filterByStatus(status: string) {
+  this.filterStatus = status;
+  
+  // filter locally instead of calling API
+  if (status === '') {
+    this.issues = [...this.allIssues];  // show all
+  } else {
+    this.issues = this.allIssues.filter(i => i.status === parseInt(status));
   }
+}
 }
