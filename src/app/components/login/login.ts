@@ -24,9 +24,9 @@ export class Login implements OnInit {
   // ========== ON INIT ==========
   // if already logged in skip login page
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/customers']);
-    }
+   if (this.authService.isLoggedIn()) {
+  this.router.navigate(['/dashboard']);
+}
   }
 
   // ========== LOGIN ==========
@@ -37,7 +37,7 @@ export class Login implements OnInit {
     this.authService.login(this.username, this.password).subscribe({
       next: (token) => {
         this.authService.saveToken(token);
-        this.router.navigate(['/customers']);
+        this.router.navigate(['/dashboard']);
         this.isLoading = false;
       },
       error: (err) => {

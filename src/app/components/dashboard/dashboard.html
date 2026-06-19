@@ -1,0 +1,92 @@
+<div class="dashboard-container">
+
+  <!-- ========== HEADER ========== -->
+  <div class="page-header">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Welcome back! Here's what's happening today.</p>
+  </div>
+
+  <!-- ========== MESSAGES ========== -->
+  <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="loading" *ngIf="isLoading">Loading dashboard...</div>
+
+  <!-- ========== STATS CARDS ========== -->
+  <div class="stats-grid" *ngIf="stats">
+
+    <div class="stat-card">
+      <div class="stat-number">{{ stats.totalCustomers }}</div>
+      <div class="stat-label">Customers</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-number">{{ stats.totalProducts }}</div>
+      <div class="stat-label">Products</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-number">{{ stats.totalIssues }}</div>
+      <div class="stat-label">Total Issues</div>
+    </div>
+
+  </div>
+
+  <!-- ========== ISSUE STATUS BREAKDOWN ========== -->
+  <div class="status-breakdown" *ngIf="stats">
+    <h2>Support Issues by Status</h2>
+    <div class="status-cards">
+
+      <div class="status-card open">
+        <div class="status-count">{{ stats.openIssues }}</div>
+        <div class="status-text">Open</div>
+      </div>
+
+      <div class="status-card inprogress">
+        <div class="status-count">{{ stats.inProgressIssues }}</div>
+        <div class="status-text">In Progress</div>
+      </div>
+
+      <div class="status-card resolved">
+        <div class="status-count">{{ stats.resolvedIssues }}</div>
+        <div class="status-text">Resolved</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== RECENT ISSUES ========== -->
+  <div class="recent-section" *ngIf="stats">
+    <h2>Recent Issues</h2>
+    <div class="recent-list">
+      <div class="recent-item" *ngFor="let issue of stats.recentIssues">
+        <div class="recent-title">{{ issue.title }}</div>
+        <span class="status-badge" [class]="getStatusClass(issue.status)">
+          {{ getStatusLabel(issue.status) }}
+        </span>
+      </div>
+
+      <div class="no-issues" *ngIf="stats.recentIssues.length === 0">
+        <p>No recent issues</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== QUICK LINKS ========== -->
+  <div class="quick-links">
+    <h2>Quick Actions</h2>
+    <div class="links-grid">
+      <a routerLink="/customers" class="link-card">
+        <div class="link-title">Manage Customers</div>
+        <div class="link-description">View, add, or edit customer records</div>
+      </a>
+      <a routerLink="/support-issues" class="link-card">
+        <div class="link-title">Support Issues</div>
+        <div class="link-description">Track and resolve customer issues</div>
+      </a>
+      <a routerLink="/instructions" class="link-card">
+        <div class="link-title">Instructions</div>
+        <div class="link-description">Browse troubleshooting guides</div>
+      </a>
+    </div>
+  </div>
+
+</div>
