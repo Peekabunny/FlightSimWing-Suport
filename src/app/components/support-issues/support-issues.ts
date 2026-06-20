@@ -130,22 +130,30 @@ export class SupportIssues implements OnInit {
   }
 
   // ========== CREATE ISSUE ==========
-  createIssue() {
-    this.supportIssueService.createIssue(this.newIssue).subscribe({
-      next: () => {
-        this.loadIssues();
-        this.newIssue = { title: '', description: '', status: 0, customerId: 0, productId: 0 };
-        this.customerControl.setValue('');
-        this.products = [];
-        this.showAddForm = false;
-        this.successMessage = 'Issue created successfully!';
-        setTimeout(() => this.successMessage = '', 3000);
-      },
-      error: (err) => {
-        this.errorMessage = 'Failed to create issue';
+createIssue() {
+  this.supportIssueService.createIssue(this.newIssue).subscribe({
+    next: (response) => {
+      this.allIssues.push(response.data);
+
+      if (this.filterStatus === '') {
+        this.issues = [...this.allIssues];
+      } else {
+        this.issues = this.allIssues.filter(
+          i => i.status === parseInt(this.filterStatus));
       }
-    });
-  }
+
+      this.newIssue = { title: '', description: '', status: 0, customerId: 0, productId: 0 };
+      this.customerControl.setValue('');
+      this.products = [];
+      this.showAddForm = false;
+      this.successMessage = 'Issue created successfully!';
+      setTimeout(() => this.successMessage = '', 3000);
+    },
+    error: (err) => {
+      this.errorMessage = 'Failed to create issue';
+    }
+  });
+}
 
 // ========== UPDATE STATUS ==========
 updateStatus(issue: any, status: number) {
@@ -183,7 +191,7 @@ deleteIssue(id: number) {
   if (confirm('Are you sure you want to delete this issue?')) {
     this.supportIssueService.deleteIssue(id).subscribe({
       next: () => {
-        // remove locally - no reload needed
+        this.allIssues = this.allIssues.filter(i => i.id !== id);
         this.issues = this.issues.filter(i => i.id !== id);
         this.selectedIssue = null;
         this.successMessage = 'Issue deleted successfully!';
