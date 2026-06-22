@@ -8,7 +8,12 @@ import { AuthService } from './auth';
 })
 export class SupportIssueService {
 
-private apiUrl = 'https://fsw-support-api-eybrdfemfvdqfnek.westus3-01.azurewebsites.net';
+  private apiUrl = 'https://fsw-support-api-eybrdfemfvdqfnek.westus3-01.azurewebsites.net';
+
+  // ========== CACHE ==========
+  // lives on the service, which survives component destruction
+  private cachedIssues: any[] = [];
+  private hasLoaded = false;
 
   constructor(
     private http: HttpClient,
@@ -19,6 +24,20 @@ private apiUrl = 'https://fsw-support-api-eybrdfemfvdqfnek.westus3-01.azurewebsi
     return new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
+  }
+
+  // ========== CACHE ACCESSORS ==========
+  getCachedIssues(): any[] {
+    return this.cachedIssues;
+  }
+
+  setCachedIssues(issues: any[]) {
+    this.cachedIssues = issues;
+    this.hasLoaded = true;
+  }
+
+  hasLoadedOnce(): boolean {
+    return this.hasLoaded;
   }
 
   // ========== GET ALL ISSUES ==========

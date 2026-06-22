@@ -83,6 +83,7 @@
         [class.selected]="selectedIssue?.id === issue.id"
         (click)="selectIssue(issue)">
         <div class="issue-title">{{ issue.title }}</div>
+        <div class="issue-meta">{{ issue.customerName }} — {{ issue.productName }}</div>
         <span class="status-badge" [class]="getStatusClass(issue.status)">
           {{ getStatusLabel(issue.status) }}
         </span>
@@ -96,6 +97,8 @@
     <!-- RIGHT: ISSUE DETAIL -->
     <div class="issue-detail" *ngIf="selectedIssue">
       <h2>{{ selectedIssue.title }}</h2>
+      <p><strong>Customer:</strong> {{ selectedIssue.customerName }}</p>
+      <p><strong>Product:</strong> {{ selectedIssue.productName }}</p>
       <p><strong>Description:</strong> {{ selectedIssue.description }}</p>
       <p><strong>Status:</strong>
         <span class="status-badge" [class]="getStatusClass(selectedIssue.status)">

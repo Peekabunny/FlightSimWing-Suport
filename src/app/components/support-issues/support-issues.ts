@@ -51,24 +51,34 @@ export class SupportIssues implements OnInit {
     private customerService: CustomerService,
     private productService: ProductService) {}
 
-  // ========== ON INIT ==========
-  ngOnInit() {
-    this.filteredCustomers = this.customerControl.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : (value as any)?.name || ''),
-      map(name => this.filterCustomers(name))
-    );
+// ========== ON INIT ==========
+ngOnInit() {
+  this.filteredCustomers = this.customerControl.valueChanges.pipe(
+    startWith(''),
+    map(value => typeof value === 'string' ? value : (value as any)?.name || ''),
+    map(name => this.filterCustomers(name))
+  );
+
+  if (this.supportIssueService.hasLoadedOnce()) {
+    // restore from service cache - no API call, no stale-read risk
+    this.allIssues = this.supportIssueService.getCachedIssues();
+    this.issues = [...this.allIssues];
+  } else {
+    // first time ever - fetch fresh
     this.loadIssues();
-    this.loadCustomers();
   }
 
-  // ========== LOAD ISSUES ==========
- loadIssues() {
+  this.loadCustomers();
+}
+
+// ========== LOAD ISSUES ==========
+loadIssues() {
   this.isLoading = true;
   this.supportIssueService.getIssues().subscribe({
     next: (response) => {
-      this.allIssues = response.data;  
-      this.issues = response.data;     
+      this.allIssues = response.data;
+      this.issues = response.data;
+      this.supportIssueService.setCachedIssues(response.data);  // save to service cache
       this.isLoading = false;
     },
     error: (err) => {
@@ -134,6 +144,7 @@ createIssue() {
   this.supportIssueService.createIssue(this.newIssue).subscribe({
     next: (response) => {
       this.allIssues.push(response.data);
+      this.supportIssueService.setCachedIssues(this.allIssues);  // sync cache
 
       if (this.filterStatus === '') {
         this.issues = [...this.allIssues];
@@ -162,15 +173,14 @@ updateStatus(issue: any, status: number) {
     status: status
   }).subscribe({
     next: () => {
-      // update in allIssues
       const issueInAll = this.allIssues.find(i => i.id === issue.id);
       if (issueInAll) issueInAll.status = status;
 
-      // update in filtered list
       issue.status = status;
       this.selectedIssue.status = status;
 
-      // re-apply current filter
+      this.supportIssueService.setCachedIssues(this.allIssues);  // sync cache
+
       if (this.filterStatus !== '') {
         this.issues = this.allIssues.filter(
           i => i.status === parseInt(this.filterStatus));
@@ -193,6 +203,7 @@ deleteIssue(id: number) {
       next: () => {
         this.allIssues = this.allIssues.filter(i => i.id !== id);
         this.issues = this.issues.filter(i => i.id !== id);
+        this.supportIssueService.setCachedIssues(this.allIssues);  // sync cache
         this.selectedIssue = null;
         this.successMessage = 'Issue deleted successfully!';
         setTimeout(() => this.successMessage = '', 3000);
@@ -203,7 +214,6 @@ deleteIssue(id: number) {
     });
   }
 }
-
   // ========== GET STATUS LABEL ==========
   getStatusLabel(status: number): string {
     switch(status) {
@@ -236,3 +246,4 @@ filterByStatus(status: string) {
   }
 }
 }
+
