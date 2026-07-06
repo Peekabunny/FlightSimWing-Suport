@@ -40,6 +40,11 @@ export class SupportIssueService {
     return this.hasLoaded;
   }
 
+   clearCache() {
+    this.cachedIssues = [];
+    this.hasLoaded = false;
+  }
+
   // ========== GET ALL ISSUES ==========
   getIssues(customerId?: number, status?: string): Observable<any> {
     let url = `${this.apiUrl}/Troubleshooting?`;

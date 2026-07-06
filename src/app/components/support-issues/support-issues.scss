@@ -3,6 +3,11 @@
   max-width: 1400px;
   margin: 0 auto;
 }
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
 
 .page-header {
   display: flex;

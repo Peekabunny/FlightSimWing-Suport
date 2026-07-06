@@ -20,6 +20,12 @@ import { map, startWith } from 'rxjs/operators';
 })
 export class SupportIssues implements OnInit {
 
+refresh() {
+  this.supportIssueService.clearCache();
+  this.selectedIssue = null;
+  this.loadIssues();
+}
+  
   // ========== AUTOCOMPLETE CONTROL ==========
   customerControl = new FormControl('');
   showCustomerList = false;

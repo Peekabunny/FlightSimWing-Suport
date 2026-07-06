@@ -1,12 +1,13 @@
 <div class="issues-container">
 
   <!-- ========== HEADER ========== -->
-  <div class="page-header">
-    <h1>Support Issues</h1>
-    <button class="btn-primary" (click)="showAddForm = !showAddForm">
-      + New Issue
-    </button>
+ <div class="page-header">
+  <h1>Support Issues</h1>
+  <div class="header-actions">
+    <button class="btn-secondary" (click)="refresh()">↻ Refresh</button>
+    <button class="btn-primary" (click)="showAddForm = !showAddForm">+ New Issue</button>
   </div>
+</div>
 
   <!-- ========== ADD ISSUE FORM ========== -->
   <div class="add-form" *ngIf="showAddForm">
