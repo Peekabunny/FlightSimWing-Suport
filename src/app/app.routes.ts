@@ -13,7 +13,7 @@ const authGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
   
-  console.log('Guard called');
+ 
   
   if (authService.isLoggedIn()) {
     return true;
@@ -22,9 +22,9 @@ const authGuard = () => {
 };
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // default route
+    { path: '', redirectTo: 'login', pathMatch: 'full' }, // default route
   { path: 'login', component: Login }, // login page does not require auth guard
-  { path: 'dashboard', component: Dashboard},
+  { path: 'dashboard', component: Dashboard , canActivate: [authGuard] },
   { path: 'customers', component: Customers, canActivate: [authGuard] },
   { path: 'support-issues', component: SupportIssues, canActivate: [authGuard] },
   { path: 'instructions', component: Instructions, canActivate: [authGuard] },
